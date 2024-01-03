@@ -2,6 +2,8 @@ from enum import Enum
 
 
 class Status(Enum):
+    """Класс констант для статусов пациента"""
+
     STATUS_00 = (0, "Тяжело болен")
     STATUS_01 = (1, "Болен")
     STATUS_02 = (2, "Слегка болен")
@@ -28,15 +30,3 @@ class Status(Enum):
             if status.status_code == code:
                 return status
         return None
-
-    @classmethod
-    def calculate_statistics(cls, patients_list):
-        total_patients = len(patients_list)
-        status_counts = {}
-        for status in cls:
-            status_counts[status.status_name] = patients_list.count(status.status_code)
-
-        print(f"В больнице на данный момент находится {total_patients} чел., из них:")
-        for status, count in status_counts.items():
-            if count != 0:
-                print(f"\t- в статусе \"{status}\": {count} чел.")

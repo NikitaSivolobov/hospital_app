@@ -43,3 +43,88 @@
 * Если необходимо, чтобы терминал не закрывался при выходе из программы, то необходимо раскомментировать последнюю строчку в main.py: 
 
                       # input("Нажмите Enter для выхода...")
+
+## Схема приложения
+```mermaid
+classDiagram
+    Hospital --|> Patient
+    Hospital --|> Status
+    Patient --|> Status
+    Hospital <|-- CommandsService
+    UserDialog --|> CommandsService
+    Application --|> UserDialog
+    Application --|> Commands
+    Application <|-- Main
+    
+    class Hospital{
+      -patients_count
+      -patient
+      -patients_list
+      -_create_hospital_patients_with_list()
+      -get_status(patient_id)
+      -discharge(patient_id)
+      -calculate_statistics()
+      -status_patient_id_change()
+      -process_discharge_request()
+      -status_up(patient_id)
+      -status_down(patient_id)
+    }
+    class Patient{
+      -status
+    }
+    
+    class Status{
+      -STATUS_00
+      -STATUS_01
+      -STATUS_02
+      -STATUS_03
+      -get_last_status()
+      -get_first_status()
+      -get_status_by_code()
+    }
+    class Commands{
+      -COMMANDS_GET_STATUS
+      -COMMANDS_STATUS_UP
+      -COMMANDS_STATUS_DOWN
+      -COMMANDS_DISCHARGE
+      -COMMANDS_CALCULATE_STATISTICS
+      -COMMANDS_STOP
+
+      -commands_ru
+      -commands_en
+    }
+    class UserDialog{
+        command_service
+        command_input()
+        command_output()
+        _patient_id_input()
+        get_calculate_statistics_from_commands()
+        get_status_from_commands()
+        get_discharge_from_commands()
+        status_down_from_commands()
+        status_up_from_commands()
+    }
+    class CommandsService{
+      -hospital
+    
+      -__validate_patient_id()
+      -command_calculate_statistics()
+      -command_get_status(patient_id)
+      -command_discharge(patient_id)
+      -command_status_down(patient_id)
+      -command_status_up(patient_id)
+    }
+    class Application{
+        user_dialog
+        Commands
+    }
+    class Main{
+        конфигурирует:
+        -Hospital()
+        -CommandsService(hospital)
+        -UserDialog(commands_service)
+        -Application(hospital)
+        -Application(user_dialog)
+        запускает: main()
+    }
+```

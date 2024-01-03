@@ -2,6 +2,8 @@ from enum import Enum
 
 
 class Commands(Enum):
+    """Класс констант для комманд"""
+
     COMMANDS_GET_STATUS = ("узнать статус пациента", "get status")
     COMMANDS_STATUS_UP = ("повысить статус пациента", "status up")
     COMMANDS_STATUS_DOWN = ("понизить статус пациента", "status down")
