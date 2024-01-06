@@ -1,7 +1,8 @@
 from enums.status import Status
 
 
-class CommandsService:
+class UseCasesCommands:
+    """Класс комманд - сценариев взаимодействия (use cases)"""
     def __init__(self, hospital):
         self.hospital = hospital
 
@@ -39,10 +40,10 @@ class CommandsService:
     def command_status_up(self, patient_id):
         patient_id = self.__validate_patient_id(patient_id)
         if isinstance(patient_id, str):
-            return patient_id
+            return patient_id, False
 
         status = self.hospital.get_status(patient_id)
         if status.status_code < Status.get_last_status().status_code:
-            return self.hospital.status_up(patient_id)
+            return self.hospital.status_up(patient_id), False
         else:
-            return self.hospital.status_patient_id_change(patient_id)
+            return patient_id, True

@@ -1,17 +1,15 @@
 from application import Application
-from enums.status import Status
-from models.patient import Patient
-from repository.hospital import Hospital
-from service.commands_service import CommandsService
-from controller.user_dialog import UserDialog
+from entities.hospital import Hospital
+from use_cases.use_cases_commands import UseCasesCommands
+from io_presenters.user_dialog_with_console import UserDialogWithConsole
 
 
 def main():
     """Конфигурирование разных реализаций"""
 
     hospital = Hospital()
-    commands_service = CommandsService(hospital)
-    user_dialog = UserDialog(commands_service)
+    commands_use_cases = UseCasesCommands(hospital)
+    user_dialog = UserDialogWithConsole(commands_use_cases)
     app = Application(user_dialog)
     app.main()
 

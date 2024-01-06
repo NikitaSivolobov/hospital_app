@@ -44,15 +44,21 @@
 
                       # input("Нажмите Enter для выхода...")
 
-## Схема приложения
+## Схемы приложения
+### Слои
+<img src="images/hospital.png" alt="hospital application layers" width="408" height="396">
+
+### Связи (1 вариант)
+
 ```mermaid
 classDiagram
-    Hospital --|> Patient
+        Hospital --|> Patient
     Hospital --|> Status
     Patient --|> Status
-    Hospital <|-- CommandsService
-    UserDialog --|> CommandsService
-    Application --|> UserDialog
+    Hospital <|-- UseCasesCommands
+    UseCasesCommands --|> Status
+    UserDialogWithConsole --|> UseCasesCommands
+    Application --|> UserDialogWithConsole
     Application --|> Commands
     Application <|-- Main
     
@@ -64,8 +70,6 @@ classDiagram
       -get_status(patient_id)
       -discharge(patient_id)
       -calculate_statistics()
-      -status_patient_id_change()
-      -process_discharge_request()
       -status_up(patient_id)
       -status_down(patient_id)
     }
@@ -93,18 +97,19 @@ classDiagram
       -commands_ru
       -commands_en
     }
-    class UserDialog{
-        command_service
+    class UserDialogWithConsole{
+        commands_use_cases
         command_input()
         command_output()
         _patient_id_input()
+        process_discharge_request()
         get_calculate_statistics_from_commands()
         get_status_from_commands()
         get_discharge_from_commands()
         status_down_from_commands()
         status_up_from_commands()
     }
-    class CommandsService{
+    class UseCasesCommands{
       -hospital
     
       -__validate_patient_id()
@@ -121,10 +126,22 @@ classDiagram
     class Main{
         конфигурирует:
         -Hospital()
-        -CommandsService(hospital)
-        -UserDialog(commands_service)
-        -Application(hospital)
+        -UseCasesCommands(hospital)
+        -UserDialogWithConsole(commands_use_cases)
         -Application(user_dialog)
         запускает: main()
     }
 ```
+### Связи (2 вариант)
+```mermaid
+stateDiagram-v2
+    Hospital --> Patient
+    Hospital --> Status
+    Patient --> Status
+    UseCasesCommands --> Hospital
+    UseCasesCommands --> Status
+    UserDialogWithConsole --> UseCasesCommands
+    Application --> UserDialogWithConsole
+    Application --> Commands
+    Main --> Application
+``` 
