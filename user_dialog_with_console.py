@@ -15,7 +15,7 @@ class UserDialogWithConsole:
             if discharge_input == 'да':
                 return True
             elif discharge_input == 'нет':
-                return False  # Status.STATUS_03.status_code
+                return False
             else:
                 self.output_to_user("Некорректный ввод. Пожалуйста, ответьте (да) или (нет).")
 
