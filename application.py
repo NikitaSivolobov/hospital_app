@@ -1,32 +1,32 @@
-from enums.commands import Commands
+from hospital_enums.commands import Commands
 
 
 class Application:
-    """Класс работы приложения в цикле"""
+    """Класс работы приложения больницы (hospital) в цикле"""
 
-    def __init__(self, user_dialog):
-        self.dialog = user_dialog
+    def __init__(self, commands_hospital):
+        self.commands_hospital = commands_hospital
 
     def main(self):
         while True:
-            command = self.dialog.command_input()
+            command = self.commands_hospital.get_command_from_user()
             if command in Commands.COMMANDS_STATUS_UP.value:
-                self.dialog.status_up_from_commands()
+                self.commands_hospital.command_patient_status_up()
 
-            elif command in Commands.COMMANDS_STATUS_DOWN.value:
-                self.dialog.status_down_from_commands()
-
-            elif command in Commands.COMMANDS_DISCHARGE.value:
-                self.dialog.get_discharge_from_commands()
+            # elif command in Commands.COMMANDS_STATUS_DOWN.value:
+            #     self.commands_hospital.command_patient_status_down()
+            #
+            # elif command in Commands.COMMANDS_DISCHARGE.value:
+            #     self.commands_hospital.command_discharge()
 
             elif command in Commands.COMMANDS_CALCULATE_STATISTICS.value:
-                self.dialog.get_calculate_statistics_from_commands()
+                self.commands_hospital.command_calculate_hospital_statistics()
 
             elif command in Commands.COMMANDS_GET_STATUS.value:
-                self.dialog.get_status_from_commands()
+                self.commands_hospital.command_get_status_patient()
 
             elif command in Commands.COMMANDS_STOP.value:
                 return False
 
             else:
-                self.dialog.command_output("Неизвестная команда! Попробуйте ещё раз")
+                self.commands_hospital.output_to_user_from_app("Неизвестная команда! Попробуйте ещё раз")

@@ -1,8 +1,8 @@
-from enums.status import Status
+from hospital_enums.status import Status
 
 
 class Patient:
-    """Класс пациента"""
+    """Класс пациента - entity"""
 
     def __init__(self, status=Status.STATUS_01):
         self.status = status
