@@ -1,6 +1,6 @@
 from application import Application
 from hospital_entities.hospital import Hospital
-from user_dialog_with_console import UserDialogWithConsole
+from console_dialog_with_user import ConsoleDialogWithUser
 from commands_hospital import CommandsHospital
 
 
@@ -8,9 +8,9 @@ def main():
     """Конфигурирование разных реализаций"""
 
     hospital = Hospital()
-    user_dialog = UserDialogWithConsole()
-    commands_hospital = CommandsHospital(hospital, user_dialog)
-    app = Application(commands_hospital)
+    dialog_with_user = ConsoleDialogWithUser()
+    commands_hospital = CommandsHospital(hospital, dialog_with_user)
+    app = Application(commands_hospital, dialog_with_user)
     app.main()
 
 

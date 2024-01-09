@@ -4,29 +4,30 @@ from hospital_enums.commands import Commands
 class Application:
     """Класс работы приложения больницы (hospital) в цикле"""
 
-    def __init__(self, commands_hospital):
-        self.commands_hospital = commands_hospital
+    def __init__(self, commands_hospital, dialog_with_user):
+        self.command_hospital = commands_hospital
+        self.dialog = dialog_with_user
 
     def main(self):
         while True:
-            command = self.commands_hospital.get_command_from_user()
-            if command in Commands.COMMANDS_STATUS_UP.value:
-                self.commands_hospital.command_patient_status_up()
+            command = self.dialog.get_command_from_user()
+            if command in Commands.STATUS_UP.value:
+                self.command_hospital.patient_status_up()
 
-            # elif command in Commands.COMMANDS_STATUS_DOWN.value:
-            #     self.commands_hospital.command_patient_status_down()
-            #
-            # elif command in Commands.COMMANDS_DISCHARGE.value:
-            #     self.commands_hospital.command_discharge()
+            elif command in Commands.STATUS_DOWN.value:
+                self.command_hospital.patient_status_down()
 
-            elif command in Commands.COMMANDS_CALCULATE_STATISTICS.value:
-                self.commands_hospital.command_calculate_hospital_statistics()
+            elif command in Commands.DISCHARGE.value:
+                self.command_hospital.discharge_patient()
 
-            elif command in Commands.COMMANDS_GET_STATUS.value:
-                self.commands_hospital.command_get_status_patient()
+            elif command in Commands.CALCULATE_STATISTICS.value:
+                self.command_hospital.calculate_hospital_statistics()
 
-            elif command in Commands.COMMANDS_STOP.value:
+            elif command in Commands.GET_STATUS.value:
+                self.command_hospital.get_status_patient()
+
+            elif command in Commands.STOP.value:
                 return False
 
             else:
-                self.commands_hospital.output_to_user_from_app("Неизвестная команда! Попробуйте ещё раз")
+                self.dialog.output_to_user("Неизвестная команда! Попробуйте ещё раз")

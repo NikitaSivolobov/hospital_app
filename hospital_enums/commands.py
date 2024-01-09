@@ -4,13 +4,13 @@ from enum import Enum
 class Commands(Enum):
     """Класс констант для комманд"""
 
-    COMMANDS_GET_STATUS = ("узнать статус пациента", "get status")
-    COMMANDS_STATUS_UP = ("повысить статус пациента", "status up")
-    COMMANDS_STATUS_DOWN = ("понизить статус пациента", "status down")
-    COMMANDS_DISCHARGE = ("выписать пациента", "discharge")
-    COMMANDS_CALCULATE_STATISTICS = ("рассчитать статистику", "calculate statistics")
-    COMMANDS_STOP = ("стоп", "stop")
+    GET_STATUS = ("узнать статус пациента", "get status")
+    STATUS_UP = ("повысить статус пациента", "status up")
+    STATUS_DOWN = ("понизить статус пациента", "status down")
+    DISCHARGE = ("выписать пациента", "discharge")
+    CALCULATE_STATISTICS = ("рассчитать статистику", "calculate statistics")
+    STOP = ("стоп", "stop")
 
-    def __init__(self, commands_ru, commands_en):
-        self.commands_ru = commands_ru
-        self.commands_en = commands_en
+    def __init__(self, command_ru, command_en):
+        self.command_ru = command_ru
+        self.command_en = command_en

@@ -48,7 +48,7 @@
 ### Слои
 <img src="hospital_layers.png" alt="hospital application layers" width="408" height="396">
 
-### Связи (1 вариант)
+### Структура и связи
 
 ```mermaid
 classDiagram
@@ -56,92 +56,94 @@ classDiagram
     Hospital --|> Status
     Patient --|> Status
     Hospital <|-- CommandsHospital
-    CommandsHospital --|> UserDialogWithConsole
+    CommandsHospital --|> ConsoleDialogWithUser
     Application --|> CommandsHospital
     Application --|> Commands
+    Application --|> ConsoleDialogWithUser
     Application <|-- Main
     
     class Hospital{
       -patients_count
       -patient
       -patients_list
-      -_create_hospital_patients_with_list()
-      -_check_patient_id(patient_id)
-      -_get_patient_id(patient_id)
+      -_create_list_hospital_patients()
+      -_is_valid_patient_id(patient_id)
       -get_total_patients()
       -get_status_counts()
-      -is_valid_patient_id(value_patient_id_from_command)
-      -get_status_name(patient_id)
-      -check_status_patient_for_up()
+      -get_status_name_by_patient_id(patient_id)
+      -can_status_up(patient_id)
       -status_up(patient_id)
-      -discharge(patient_id)
+      -can_status_down(patient_id)
       -status_down(patient_id)
+      -discharge(patient_id)
     }
     class Patient{
       -status
     }
     
     class Status{
-      -STATUS_00
-      -STATUS_01
-      -STATUS_02
-      -STATUS_03
+      -ID_00
+      -ID_01
+      -ID_02
+      -ID_03
+      -id_code
+      -name_value
       -get_last_status()
       -get_first_status()
-      -get_status_by_code()
+      -get_status_by_code(code)
     }
     class Commands{
-      -COMMANDS_GET_STATUS
-      -COMMANDS_STATUS_UP
-      -COMMANDS_STATUS_DOWN
-      -COMMANDS_DISCHARGE
-      -COMMANDS_CALCULATE_STATISTICS
-      -COMMANDS_STOP
+      -GET_STATUS
+      -STATUS_UP
+      -STATUS_DOWN
+      -DISCHARGE
+      -CALCULATE_STATISTICS
+      -STOP
 
-      -commands_ru
-      -commands_en
+      -command_ru
+      -command_en
     }
-    class UserDialogWithConsole{
-        get_input_from_user()
+    class ConsoleDialogWithUser{
+        get_command_from_user()
         get_patient_id_from_user()
-        process_discharge_request()
-        output_to_user(output)
+        _check_patient_id(patient_id)
+        patient_discharge_request()
+        output_to_user(value)
     }
     class CommandsHospital{
       -hospital
-      -user_dialog
+      -dialog_with_user
     
-      -_process_patient_status_up(valid_patient_id)
-      -_process_patient_discharge(valid_patient_id)
-      -get_command_from_user()
-      -output_to_user_from_app(value)
-      -command_calculate_hospital_statistics()
-      -command_get_status_patient()
-      -command_patient_status_up()
-      -command_discharge(patient_id)
-      -command_patient_status_down(patient_id)
+      -calculate_hospital_statistics()
+      -get_status_patient()
+      -patient_status_up()
+      -patient_status_down()
+      -discharge_patient()
     }
     class Application{
-        commands_hospital
+        command_hospital
+        dialog_with_user
+        -main()
     }
     class Main{
         конфигурирует:
         -Hospital()
-        -UserDialogWithConsole(hospital)
-        -CommandsHospital(hospital, user_dialog)
-        -Application(commands_hospital)
+        -ConsoleDialogWithUser()
+        -CommandsHospital(hospital, dialog_with_user)
+        -Application(commands_hospital, dialog_with_user)
         запускает: main()
     }
 ```
-### Связи (2 вариант)
+### Связи
 ```mermaid
 stateDiagram-v2
     Hospital --> Patient
     Hospital --> Status
     Patient --> Status
     CommandsHospital --> Hospital
-    CommandsHospital --> UserDialogWithConsole
+    CommandsHospital --> ConsoleDialogWithUser
     Application --> CommandsHospital
+    Application --> ConsoleDialogWithUser
     Application --> Commands
     Main --> Application
 ``` 

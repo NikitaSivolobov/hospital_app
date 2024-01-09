@@ -7,29 +7,24 @@ from config import Config
 class Hospital:
     """Класс корневой бизнес логики (hospital) - entity"""
 
-    def __init__(self, patients_count=Config.PATIENTS_COUNT, patient=Patient(Status.STATUS_01)):
+    def __init__(self, patients_count=Config.DEFAULT_PATIENTS_COUNT, patient=Patient(Config.DEFAULT_PATIENT_STATUS)):
         self.patients_count = patients_count
         self.patient = patient
         self.patients_list = None
-        self._create_hospital_patients_with_list()
+        self._create_list_hospital_patients()
 
-    def _create_hospital_patients_with_list(self):
-        self.patients_list = [self.patient.status.status_code for _ in range(self.patients_count)]
+    def _create_list_hospital_patients(self):
+        self.patients_list = [self.patient.status.id_code for _ in range(self.patients_count)]
 
-    def _check_patient_id(self, patient_id):
+    def _is_valid_patient_id(self, patient_id):
         try:
-            check_patient_id = int(patient_id)
-            if check_patient_id <= 0:
-                raise PatientIDNumberError("Ошибка. ID пациента должно быть числом (целым, положительным)")
-            elif check_patient_id - 1 >= len(self.patients_list):
-                raise PatientIDIsNotInHospitalError("Ошибка. В больнице нет пациента с таким ID")
-            return True
+            patient_id = int(patient_id)
+            if patient_id <= 0:
+                raise PatientIDNumberError("ID пациента должно быть числом (целым, положительным)")
+            if patient_id > len(self.patients_list):
+                raise PatientIDIsNotInHospitalError("В больнице нет пациента с таким ID")
         except ValueError:
-            raise PatientIDNumberError("Ошибка. ID пациента должно быть числом (целым, положительным)")
-
-    @staticmethod
-    def _get_patient_id(patient_id):
-        return patient_id - 1
+            raise PatientIDNumberError("ID пациента должно быть числом (целым, положительным)")
 
     def get_total_patients(self):
         return len(self.patients_list)
@@ -37,34 +32,49 @@ class Hospital:
     def get_status_counts(self):
         status_counts = {}
         for status in Status:
-            status_counts[status.status_name] = self.patients_list.count(status.status_code)
+            status_counts[status.name_value] = self.patients_list.count(status.id_code)
         return status_counts
 
-    def is_valid_patient_id(self, value_patient_id_from_command):
-        try:
-            check_patient_id = self._check_patient_id(value_patient_id_from_command)
-            if check_patient_id:
-                is_valid_patient_id = self._get_patient_id(int(value_patient_id_from_command))
-                return is_valid_patient_id
-        except (PatientIDNumberError, PatientIDIsNotInHospitalError) as err:
-            return err.args[0]
+    def get_status_name_by_patient_id(self, patient_id):
+        self._is_valid_patient_id(patient_id)
+        patient_id -= 1
+        status_code = self.patients_list[patient_id]
+        status = Status.get_status_by_code(status_code)
+        return status.name_value
 
-    def get_status_name(self, patient_id):
-        status_code_in_list = self.patients_list[patient_id]
-        status_name_in_list = Status.get_status_by_code(status_code_in_list)
-        return status_name_in_list.status_name
-
-    def check_status_patient_for_up(self, patient_id):
-        status_code_patient_in_hospital = self.patients_list[patient_id]
-        if status_code_patient_in_hospital < Status.get_last_status().status_code:
+    def can_status_up(self, patient_id):
+        self._is_valid_patient_id(patient_id)
+        patient_id -= 1
+        status_code = self.patients_list[patient_id]
+        if status_code < Status.get_last_status().id_code:
             return True
         else:
             return False
 
     def status_up(self, patient_id):
-        status_patient_id = self.patients_list[patient_id]
-        status_patient_id += 1
-        self.patients_list[patient_id] = status_patient_id
+        self._is_valid_patient_id(patient_id)
+        patient_id -= 1
+        status_patient = self.patients_list[patient_id]
+        status_patient += 1
+        self.patients_list[patient_id] = status_patient
+
+    def can_status_down(self, patient_id):
+        self._is_valid_patient_id(patient_id)
+        patient_id -= 1
+        status_code = self.patients_list[patient_id]
+        if status_code > Status.get_first_status().id_code:
+            return True
+        else:
+            return False
+
+    def status_down(self, patient_id):
+        self._is_valid_patient_id(patient_id)
+        patient_id -= 1
+        status_patient = self.patients_list[patient_id]
+        status_patient -= 1
+        self.patients_list[patient_id] = status_patient
 
     def discharge(self, patient_id):
+        self._is_valid_patient_id(patient_id)
+        patient_id -= 1
         del self.patients_list[patient_id]
