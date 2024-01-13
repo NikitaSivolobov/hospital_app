@@ -52,9 +52,7 @@
 
 ```mermaid
 classDiagram
-    Hospital --|> Patient
     Hospital --|> Status
-    Patient --|> Status
     Hospital <|-- CommandsHospital
     CommandsHospital --|> ConsoleDialogWithUser
     Application --|> CommandsHospital
@@ -63,11 +61,11 @@ classDiagram
     Application <|-- Main
     
     class Hospital{
-      -patients_count
-      -patient
-      -patients_list
+      _patients_count
+      _patient_status
+      patients_list
       -_create_list_hospital_patients()
-      -_is_valid_patient_id(patient_id)
+      -_verify_patient_id(patient_id)
       -get_total_patients()
       -get_status_counts()
       -get_status_name_by_patient_id(patient_id)
@@ -77,42 +75,39 @@ classDiagram
       -status_down(patient_id)
       -discharge(patient_id)
     }
-    class Patient{
-      -status
-    }
     
     class Status{
-      -ID_00
-      -ID_01
-      -ID_02
-      -ID_03
-      -id_code
-      -name_value
-      -get_last_status()
-      -get_first_status()
+      ID_00
+      ID_01
+      ID_02
+      ID_03
+      id_code
+      name_value
+      -get_highest_status()
+      -get_lowest_status()
       -get_status_by_code(code)
     }
     class Commands{
-      -GET_STATUS
-      -STATUS_UP
-      -STATUS_DOWN
-      -DISCHARGE
-      -CALCULATE_STATISTICS
-      -STOP
+      GET_STATUS
+      STATUS_UP
+      STATUS_DOWN
+      DISCHARGE
+      CALCULATE_STATISTICS
+      STOP
 
-      -command_ru
-      -command_en
+      command_ru
+      command_en
     }
     class ConsoleDialogWithUser{
-        get_command_from_user()
-        get_patient_id_from_user()
-        _check_patient_id(patient_id)
-        patient_discharge_request()
-        output_to_user(value)
+        -request_command()
+        -request_patient_id()
+        -_convert_text_to_patient_id(patient_id_text)
+        -request_confirm_for_patient_discharge()
+        -send_message(text)
     }
     class CommandsHospital{
-      -hospital
-      -dialog_with_user
+      hospital
+      dialog_with_user
     
       -calculate_hospital_statistics()
       -get_status_patient()
@@ -137,9 +132,7 @@ classDiagram
 ### Связи
 ```mermaid
 stateDiagram-v2
-    Hospital --> Patient
     Hospital --> Status
-    Patient --> Status
     CommandsHospital --> Hospital
     CommandsHospital --> ConsoleDialogWithUser
     Application --> CommandsHospital

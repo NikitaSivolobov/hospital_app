@@ -5,31 +5,28 @@ class ConsoleDialogWithUser:
     """Класс диалога с пользователем при помощи консольного ввода/вывода"""
 
     @staticmethod
-    def get_command_from_user() -> str:
+    def request_command() -> str:
         return input("Введите команду: ").strip().lower()
 
-    def get_patient_id_from_user(self) -> int:
-        patient_id = input("Введите ID пациента: ").strip().lower()
-        return self._check_patient_id(patient_id)
+    def request_patient_id(self) -> int:
+        patient_id_text = input("Введите ID пациента: ").strip().lower()
+        return self._convert_text_to_patient_id(patient_id_text)
 
     @staticmethod
-    def _check_patient_id(patient_id):
+    def _convert_text_to_patient_id(patient_id_text):
         try:
-            patient_id = int(patient_id)
+            patient_id = int(patient_id_text)
             if patient_id <= 0:
-                raise PatientIDNumberError("ID пациента должно быть числом (целым, положительным)")
+                raise ValueError()
+            return patient_id
         except ValueError:
-            raise PatientIDNumberError("ID пациента должно быть числом (целым, положительным)")
-        return patient_id
+            raise PatientIDNumberError()
 
     @staticmethod
-    def patient_discharge_request() -> bool:
-        discharge_input = input("Желаете этого клиента выписать? (да/нет): ").strip().lower()
-        if discharge_input == 'да':
-            return True
-        else:
-            return False
+    def request_confirm_for_patient_discharge() -> bool:
+        response = input("Желаете этого клиента выписать? (да/нет): ").strip().lower()
+        return response == "да"
 
     @staticmethod
-    def output_to_user(value):
-        print(f"{value}\n")
+    def send_message(text):
+        print(f"{text}\n")

@@ -1,5 +1,5 @@
 from application import Application
-from hospital_entities.hospital import Hospital
+from hospital import Hospital
 from console_dialog_with_user import ConsoleDialogWithUser
 from commands_hospital import CommandsHospital
 

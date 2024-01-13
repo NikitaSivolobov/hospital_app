@@ -10,7 +10,7 @@ class Application:
 
     def main(self):
         while True:
-            command = self.dialog.get_command_from_user()
+            command = self.dialog.request_command()
             if command in Commands.STATUS_UP.value:
                 self.command_hospital.patient_status_up()
 
@@ -30,4 +30,4 @@ class Application:
                 return False
 
             else:
-                self.dialog.output_to_user("Неизвестная команда! Попробуйте ещё раз")
+                self.dialog.send_message("Неизвестная команда! Попробуйте ещё раз")

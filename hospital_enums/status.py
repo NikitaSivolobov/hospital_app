@@ -14,19 +14,22 @@ class Status(Enum):
         self.name_value = status_name
 
     @classmethod
-    def get_last_status(cls):
-        last_status = None
+    def get_highest_status(cls):
+        """Метод получения самого высокого статуса"""
+        highest_status = None
         for status in cls:
-            last_status = status
-        return last_status
+            highest_status = status
+        return highest_status
 
     @classmethod
-    def get_first_status(cls):
+    def get_lowest_status(cls):
+        """Метод получения самого низкого статуса"""
         return next(iter(cls))
 
     @classmethod
-    def get_status_by_code(cls, code):
+    def get_status_by_code(cls, status_code):
+        """Метод получения статуса по коду (status_code)"""
         for status in cls:
-            if status.id_code == code:
+            if status.id_code == status_code:
                 return status
         return None
