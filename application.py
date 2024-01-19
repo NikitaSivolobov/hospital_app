@@ -27,7 +27,8 @@ class Application:
                 self.command_hospital.get_status_patient()
 
             elif command in Commands.STOP.value:
-                return False
+                self.dialog.send_message("Сеанс завершён.")
+                break
 
             else:
                 self.dialog.send_message("Неизвестная команда! Попробуйте ещё раз")

@@ -29,6 +29,11 @@
 
 * Имеется возможность запуска с помощью start.bat (если активировано виртуальное окружение)
 
+* Запуск всех тестов в папке /tests с подробным выводом результатов тестирования
+```
+                      pytest --verbose tests
+```
+
 ## Перечень команд для работы с приложением
 
  Команда RU                   | Команда EN              |
@@ -63,7 +68,7 @@ classDiagram
     class Hospital{
       _patients_count
       _patient_status
-      patients_list
+      _patients_list
       -_create_list_hospital_patients()
       -_verify_patient_id(patient_id)
       -get_total_patients()

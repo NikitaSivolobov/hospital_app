@@ -21,6 +21,4 @@ if __name__ == '__main__':
         main()
     except KeyboardInterrupt:
         print("\nПользователь принудительно остановил программу \nОшибка KeyboardInterrupt")
-    finally:
-        print("Сеанс завершён.")
     # input("Нажмите Enter для выхода...")
