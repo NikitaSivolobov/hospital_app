@@ -30,7 +30,7 @@ class TestGetDataFromHospital:
 
     def test_get_status_counts_when_empty_patient_list(self):
         self.hospital._patients_list = []
-        actual_total_patients = self.hospital.get_total_patients()
+        actual_total_patients = self.hospital.get_status_counts()
         assert actual_total_patients == {"Болен": 0, "Слегка болен": 0, "Готов к выписке": 0, "Тяжело болен": 0}
 
     def test_get_status_counts_when_default_patient_list(self):
