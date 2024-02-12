@@ -26,7 +26,7 @@ class CommandsHospital:
             status_name = self.hospital.get_status_name_by_patient_id(patient_id)
             self.dialog.send_message(f"Статус пациента: \"{status_name}\"")
         except (PatientIDNumberError, PatientNotExistsError) as err:
-            self.dialog.send_message(err)
+            self.dialog.send_message(str(err))
 
     def patient_status_up(self):
         try:
@@ -43,7 +43,7 @@ class CommandsHospital:
                     status_name = self.hospital.get_status_name_by_patient_id(patient_id)
                     self.dialog.send_message(f"Пациент остался в статусе \"{status_name}\"")
         except (PatientIDNumberError, PatientNotExistsError) as err:
-            self.dialog.send_message(err)
+            self.dialog.send_message(str(err))
 
     def discharge_patient(self):
         try:
@@ -51,7 +51,7 @@ class CommandsHospital:
             self.hospital.discharge(patient_id)
             self.dialog.send_message("Пациент выписан из больницы")
         except (PatientIDNumberError, PatientNotExistsError) as err:
-            self.dialog.send_message(err)
+            self.dialog.send_message(str(err))
 
     def patient_status_down(self):
         try:
@@ -63,4 +63,4 @@ class CommandsHospital:
             else:
                 self.dialog.send_message("Ошибка. Нельзя понизить самый низкий статус (наши пациенты не умирают)")
         except (PatientIDNumberError, PatientNotExistsError) as err:
-            self.dialog.send_message(err)
+            self.dialog.send_message(str(err))

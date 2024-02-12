@@ -7,7 +7,7 @@ from commands_hospital import CommandsHospital
 def main():
     """Конфигурирование разных реализаций"""
 
-    hospital = Hospital()
+    hospital = Hospital([1]*200)
     dialog_with_user = ConsoleDialogWithUser()
     commands_hospital = CommandsHospital(hospital, dialog_with_user)
     app = Application(commands_hospital, dialog_with_user)

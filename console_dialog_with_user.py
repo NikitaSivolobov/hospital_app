@@ -1,3 +1,4 @@
+from console import Console
 from exceptions_hospital import PatientIDNumberError
 
 
@@ -6,10 +7,10 @@ class ConsoleDialogWithUser:
 
     @staticmethod
     def request_command() -> str:
-        return input("Введите команду: ").strip().lower()
+        return Console.input("Введите команду: ").strip().lower()
 
     def request_patient_id(self) -> int:
-        patient_id_text = input("Введите ID пациента: ").strip().lower()
+        patient_id_text = Console.input("Введите ID пациента: ").strip().lower()
         return self._convert_text_to_patient_id(patient_id_text)
 
     @staticmethod
@@ -24,9 +25,9 @@ class ConsoleDialogWithUser:
 
     @staticmethod
     def request_confirm_for_patient_discharge() -> bool:
-        response = input("Желаете этого клиента выписать? (да/нет): ").strip().lower()
+        response = Console.input("Желаете этого клиента выписать? (да/нет): ").strip().lower()
         return response == "да"
 
     @staticmethod
     def send_message(text):
-        print(f"{text}\n")
+        Console.print(f"{text}\n")

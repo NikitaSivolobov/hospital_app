@@ -1,20 +1,12 @@
 from hospital_enums.status import Status
 from exceptions_hospital import PatientNotExistsError
-from config import Config
 
 
 class Hospital:
     """Класс корневой бизнес логики (hospital) - entity"""
 
-    def __init__(self,
-                 patients_count=Config.DEFAULT_PATIENTS_COUNT,
-                 patient_status=Config.DEFAULT_PATIENT_STATUS):
-        self._patients_count = patients_count
-        self._patient_status = patient_status
-        self._create_list_hospital_patients()
-
-    def _create_list_hospital_patients(self):
-        self._patients_list = [Config.DEFAULT_PATIENT_STATUS.id_code for _ in range(self._patients_count)]
+    def __init__(self, patients_list):
+        self._patients_list = patients_list
 
     def _verify_patient_id(self, patient_id):
         if patient_id > len(self._patients_list):
