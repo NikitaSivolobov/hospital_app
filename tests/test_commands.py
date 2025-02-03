@@ -1,94 +1,78 @@
 from unittest.mock import MagicMock
 
-from commands_hospital import CommandsHospital
-from hospital import Hospital
+import commands_hospital as command
+import hospital
 
 
-class TestCommandGetStatusPatient:
-    """Тестовый класс, проверяющий метод команды получения статуса пациента"""
+"""метод команды получения статуса пациента"""
 
-    def test_get_status_patient(self):
-        self.command = CommandsHospital(Hospital([0, 0]), MagicMock())
-        self.command.dialog.request_patient_id = MagicMock(return_value=2)
-        self.command.dialog.send_message = MagicMock()
+def test_get_status_patient():
+    command.dialog.request_patient_id = MagicMock(return_value=2)
+    command.dialog.send_message = MagicMock()
+    command.get_status_patient([0, 0])
+    command.dialog.send_message.assert_called_with("Статус пациента: \"Тяжело болен\"")
 
-        self.command.get_status_patient()
+def test_get_status_patient_when_patient_id_above_range_patient_list():
+    command.dialog.request_patient_id = MagicMock(return_value=2)
+    command.dialog.send_message = MagicMock()
+    command.get_status_patient([0])
+    command.dialog.send_message.assert_called_with("Ошибка. В больнице нет пациента с таким ID")
 
-        assert self.command.hospital._patients_list == [0, 0]
-        self.command.dialog.send_message.assert_called_with("Статус пациента: \"Тяжело болен\"")
-
-    def test_get_status_patient_when_patient_id_above_range_patient_list(self):
-        self.command = CommandsHospital(Hospital([0]), MagicMock())
-        self.command.dialog.request_patient_id = MagicMock(return_value=2)
-        self.command.dialog.send_message = MagicMock()
-
-        self.command.get_status_patient()
-
-        assert self.command.hospital._patients_list == [0]
-        self.command.dialog.send_message.assert_called_with("Ошибка. В больнице нет пациента с таким ID")
-
-    def test_get_status_patient_when_empty_patient_list(self):
-        self.command = CommandsHospital(Hospital([]), MagicMock())
-        self.command.dialog.request_patient_id = MagicMock(return_value=2)
-        self.command.dialog.send_message = MagicMock()
-
-        self.command.get_status_patient()
-
-        assert self.command.hospital._patients_list == []
-        self.command.dialog.send_message.assert_called_with("Ошибка. В больнице нет пациента с таким ID")
+def test_get_status_patient_when_empty_patient_list():
+    command.dialog.request_patient_id = MagicMock(return_value=2)
+    command.dialog.send_message = MagicMock()
+    command.get_status_patient([])
+    command.dialog.send_message.assert_called_with("Ошибка. В больнице нет пациента с таким ID")
 
 
-class TestCommandPatientStatusUp:
-    """Тестовый класс, проверяющий метод команды повышения статуса пациента"""
 
-    def test_status_up(self):
-        self.command = CommandsHospital(Hospital([0, 0]), MagicMock())
-        self.command.dialog.request_patient_id = MagicMock(return_value=2)
-        self.command.dialog.send_message = MagicMock()
+"""метод команды повышения статуса пациента"""
 
-        self.command.patient_status_up()
+def test_status_up():
+    command.dialog.request_patient_id = MagicMock(return_value=2)
+    command.dialog.send_message = MagicMock()
 
-        assert self.command.hospital._patients_list == [0, 1]
-        self.command.dialog.send_message.assert_called_with("Новый статус пациента: \"Болен\"")
+    command.patient_status_up([0, 0])
 
-    def test_status_up_when_discharge_patient(self):
-        self.command = CommandsHospital(Hospital([0, 3]), MagicMock())
-        self.command.dialog.request_patient_id = MagicMock(return_value=2)
-        self.command.dialog.request_confirm_for_patient_discharge = MagicMock(return_value=True)
-        self.command.dialog.send_message = MagicMock()
+    assert command.hospital._patients_list == [0, 1]
+    command.dialog.send_message.assert_called_with("Новый статус пациента: \"Болен\"")
 
-        self.command.patient_status_up()
+def test_status_up_when_discharge_patient():
+    command.dialog.request_patient_id = MagicMock(return_value=2)
+    command.dialog.request_confirm_for_patient_discharge = MagicMock(return_value=True)
+    command.dialog.send_message = MagicMock()
+    command.patient_status_up([0, 3])
 
-        assert self.command.hospital._patients_list == [0]
-        self.command.dialog.send_message.assert_called_with("Пациент выписан из больницы")
+    assert command.hospital._patients_list == [0]
+    command.dialog.send_message.assert_called_with("Пациент выписан из больницы")
 
-    def test_status_up_when_discharge_patient_false(self):
-        self.command = CommandsHospital(Hospital([0, 3]), MagicMock())
-        self.command.dialog.request_patient_id = MagicMock(return_value=2)
-        self.command.dialog.request_confirm_for_patient_discharge = MagicMock(return_value=False)
-        self.command.dialog.send_message = MagicMock()
+def test_status_up_when_discharge_patient_false():
+    command.hospital._patients_list = [0, 3]
+    command.dialog.request_patient_id = MagicMock(return_value=2)
+    command.dialog.request_confirm_for_patient_discharge = MagicMock(return_value=False)
+    command.dialog.send_message = MagicMock()
 
-        self.command.patient_status_up()
+    command.patient_status_up([0, 3])
 
-        assert self.command.hospital._patients_list == [0, 3]
-        self.command.dialog.send_message.assert_called_with("Пациент остался в статусе \"Готов к выписке\"")
+    assert command.hospital._patients_list == [0, 3]
+    command.dialog.send_message.assert_called_with("Пациент остался в статусе \"Готов к выписке\"")
 
-    def test_status_up_when_patient_id_above_range_patient_list(self):
-        self.command = CommandsHospital(Hospital([0]), MagicMock())
-        self.command.dialog.request_patient_id = MagicMock(return_value=2)
-        self.command.dialog.send_message = MagicMock()
+def test_status_up_when_patient_id_above_range_patient_list():
+    command.hospital._patients_list = [0]
+    command.dialog.request_patient_id = MagicMock(return_value=2)
+    command.dialog.send_message = MagicMock()
 
-        self.command.patient_status_up()
+    command.patient_status_up([0])
 
-        assert self.command.hospital._patients_list == [0]
-        self.command.dialog.send_message.assert_called_with("Ошибка. В больнице нет пациента с таким ID")
+    assert command.hospital._patients_list == [0]
+    command.dialog.send_message.assert_called_with("Ошибка. В больнице нет пациента с таким ID")
 
-    def test_status_up_patient_when_empty_patient_list(self):
-        self.command = CommandsHospital(Hospital([]), MagicMock())
-        self.command.dialog.request_patient_id = MagicMock(return_value=2)
-        self.command.dialog.send_message = MagicMock()
+def test_status_up_patient_when_empty_patient_list():
+    command.hospital._patients_list = []
+    command.dialog.request_patient_id = MagicMock(return_value=2)
+    command.dialog.send_message = MagicMock()
 
-        self.command.patient_status_up()
+    command.patient_status_up([])
 
-        assert self.command.hospital._patients_list == []
-        self.command.dialog.send_message.assert_called_with("Ошибка. В больнице нет пациента с таким ID")
+    assert command.hospital._patients_list == []
+    command.dialog.send_message.assert_called_with("Ошибка. В больнице нет пациента с таким ID")

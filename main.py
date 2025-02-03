@@ -1,24 +1,12 @@
-from application import Application
-from hospital import Hospital
-from console_dialog_with_user import ConsoleDialogWithUser
-from commands_hospital import CommandsHospital
-
-
-def main():
-    """Конфигурирование разных реализаций"""
-
-    hospital = Hospital([1]*200)
-    dialog_with_user = ConsoleDialogWithUser()
-    commands_hospital = CommandsHospital(hospital, dialog_with_user)
-    app = Application(commands_hospital, dialog_with_user)
-    app.main()
-
+import application
 
 if __name__ == '__main__':
     # Запуск программы
 
     try:
-        main()
+        hospital_patients_list = [1] * 200
+        application.main_loop(hospital_patients_list)
     except KeyboardInterrupt:
-        print("\nПользователь принудительно остановил программу \nОшибка KeyboardInterrupt")
+        print("\nПользователь принудительно остановил программу"
+              "\nОшибка KeyboardInterrupt")
     # input("Нажмите Enter для выхода...")

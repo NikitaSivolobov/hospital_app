@@ -1,8 +1,6 @@
-class Console:
-    @staticmethod
-    def input(request):
-        return input(request)
+def input_(request):
+    return input(request)
 
-    @staticmethod
-    def print(message):
-        print(message)
+
+def print_(message):
+    print(message)

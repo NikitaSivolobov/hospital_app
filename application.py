@@ -1,34 +1,31 @@
-from hospital_enums.commands import Commands
+import commands_hospital
+import console_dialog_with_user as dialog
+
+from commands import COMMAND_MAP
 
 
-class Application:
-    """Класс работы приложения больницы (hospital) в цикле"""
+def main_loop(patients_list):
+    """Основной цикл обработки команд."""
+    while True:
+        command_key = COMMAND_MAP.get(dialog.request_command())
+        if command_key:
+            if command_key == "STATUS_UP":
+                commands_hospital.patient_status_up(patients_list)
 
-    def __init__(self, commands_hospital, dialog_with_user):
-        self.command_hospital = commands_hospital
-        self.dialog = dialog_with_user
+            elif command_key == "STATUS_DOWN":
+                commands_hospital.patient_status_down(patients_list)
 
-    def main(self):
-        while True:
-            command = self.dialog.request_command()
-            if command in Commands.STATUS_UP.value:
-                self.command_hospital.patient_status_up()
+            elif command_key == "DISCHARGE":
+                commands_hospital.discharge_patient(patients_list)
 
-            elif command in Commands.STATUS_DOWN.value:
-                self.command_hospital.patient_status_down()
+            elif command_key == "CALCULATE_STATISTICS":
+                commands_hospital.calculate_hospital_statistics(patients_list)
 
-            elif command in Commands.DISCHARGE.value:
-                self.command_hospital.discharge_patient()
+            elif command_key == "GET_STATUS":
+                commands_hospital.get_status_patient(patients_list)
 
-            elif command in Commands.CALCULATE_STATISTICS.value:
-                self.command_hospital.calculate_hospital_statistics()
-
-            elif command in Commands.GET_STATUS.value:
-                self.command_hospital.get_status_patient()
-
-            elif command in Commands.STOP.value:
-                self.dialog.send_message("Сеанс завершён.")
+            elif command_key == "STOP":
+                dialog.send_message("Сеанс завершён.")
                 break
-
-            else:
-                self.dialog.send_message("Неизвестная команда! Попробуйте ещё раз")
+        else:
+            dialog.send_message("Неизвестная команда! Попробуйте ещё раз")
